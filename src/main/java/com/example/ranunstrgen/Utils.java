@@ -13,35 +13,34 @@ public class Utils {
 		return factorial;
 	}
 
-	static public String swap(String str, int i, int j) {
-		char[] ch = str.toCharArray();
-		char c = ch[i];
-		ch[i] = ch[j];
-		ch[j] = c;
-		return ch.toString();
+	static public char[] swap(char[] cs, int i, int j) {
+		char c = cs[i];
+		cs[i] = cs[j];
+		cs[j] = c;
+		return cs;
 	}
 
-	static public boolean isPossibleToSwap(String str, int start, int curr) {
+	static public boolean isPossibleToSwap(char[] cs, int start, int curr) {
 		for (int i = start; i < curr; i++) {
-			if (str.charAt(i) == str.charAt(curr)) {
+			if (cs[i] == cs[curr]) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	static public void findPermutations(String str, int pos, int n, TreeSet<String> resultSet) {
+	static public void findPermutations(char[] cs, int pos, int n, TreeSet<String> resultSet) {
 		if (pos >= n) {
-			resultSet.add(str);
+			resultSet.add(cs.toString());
 			return;
 		}
 
 		for (int i = pos; i < n; i++) {
-			boolean isPossibleToSwap = isPossibleToSwap(str, pos, i);
+			boolean isPossibleToSwap = isPossibleToSwap(cs, pos, i);
 			if (isPossibleToSwap) {
-				str = swap(str, pos, i);
-				findPermutations(str, pos + 1, n, resultSet);
-				str = swap(str, pos, i);
+				cs = swap(cs, pos, i);
+				findPermutations(cs, pos + 1, n, resultSet);
+				cs = swap(cs, pos, i);
 			}
 		}
 	}
@@ -57,4 +56,18 @@ public class Utils {
 		}
 		return resultSet;
 	}
+	
+    static public int permute(int n, int r) {
+        return calculateFactorial(n) / calculateFactorial(n - r);
+    }
+    
+    static public int findNumberOfPermutations(int min, int max) {
+    	int n = 0;
+        int p;
+        for (int i = min; i <= max; i++) {
+        	p = permute(max, i);
+        	n += p;
+        }
+        return n;
+    }
 }
