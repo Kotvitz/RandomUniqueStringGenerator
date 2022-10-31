@@ -44,13 +44,14 @@ public class StringTaskService {
 		this.restTemplate = restTemplate;
 	}
 
-	public void receiveNewJob(StringTask task) throws FileNotFoundException, IOException {
+	public Long receiveNewJob(StringTask task) throws FileNotFoundException, IOException {
 		TreeSet<String> resultSet = new TreeSet<>();
 		Long id = restTemplate.postForObject(uriReceiveNewJob, task, Long.class);
 		Utils.findPermutations(task.getPossibleChars(), 0, task.getPossibleChars().length, resultSet);
 		resultSet = Utils.findSubpermutations(task.getMinLength(), task.getMaxLength(), resultSet,
 				task.getNumberOfStrings());
 		saveToFile(id, resultSet);
+		return id;
 	}
 	
 	public ResponseEntity<Object> grabResults(Long id) throws FileNotFoundException {
