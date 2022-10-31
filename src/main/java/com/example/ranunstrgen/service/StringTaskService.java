@@ -39,12 +39,9 @@ public class StringTaskService {
 
 	private final RestTemplate restTemplate;
 	
-	private final StringTaskBaseService baseService;
-
 	@Autowired
-	public StringTaskService(RestTemplate restTemplate, StringTaskBaseService baseService) {
+	public StringTaskService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
-		this.baseService = baseService;
 	}
 
 	public void receiveNewJob(StringTask task) throws FileNotFoundException, IOException {
@@ -60,7 +57,7 @@ public class StringTaskService {
 		String path = System.getProperty("user.dir").replaceAll(Matcher.quoteReplacement("\\"), "/");
 		File file = new File(path + "/task_" + id + "_.txt");
 		String fileName = file.getName();
-		StringTask task = baseService.getTask(id);
+		StringTask task = restTemplate.getForObject(uriGrabResults + id.toString(), StringTask.class);
 		if(!task.equals(null)) {
 			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 			logger.info("The results from file " + fileName + " have been grabbed.");
